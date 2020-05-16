@@ -137,46 +137,31 @@ function isTriangle(a, b, c) {
  *   { top:20, left:20, width: 20, height: 20 }    =>  false
  *
  */
-function doRectanglesOverlap(/* rect1, rect2 */) {
-  throw new Error('Not implemented');
-  // x
-  // const rect1x1 = rect1.left;
-  // const rect1x2 = rect1.left - rect1.width;
-  // // y
-  // const rect1y1 = rect1.top;
-  // const rect1y2 = rect1.top - rect1.heighy;
-  // // x
-  // const rect2x1 = rect2.left;
-  // const rect2x2 = rect2.left - rect2.width;
-  // // y
-  // const rect2y1 = rect2.top;
-  // const rect2y2 = rect2.top - rect2.height;
+function doRectanglesOverlap(rect1, rect2) {
+  // throw new Error('Not implemented');
+  // top and left rect 1
+  const top1 = rect1.top;
+  const left1 = rect1.left;
+  // top and left rect 2
+  const top2 = rect2.top;
+  const left2 = rect2.left;
 
-  // if (rect1x1 >= rect2x2 || rect2x1 >= rect1x2) return true;
+  // bottom and right rect 1
+  const bottom1 = top1 - rect1.height;
+  const right1 = left1 + rect1.width;
+  // bottom and right rect 2
+  const bottom2 = top2 - rect2.height;
+  const right2 = left2 + rect2.width;
 
-  // // no vertical overlap
-  // if (rect1y1 <= rect2y2 || rect2y1 <= rect1y2) return true;
-
-  // return false;
-  // const l1X = rect1.top;
-  // const r2X = rect2.top - rect2.width;
-  // const l2X = rect2.top;
-  // const r1X = rect1.top - rect1.width;
-
-  // const l1Y = rect1.left;
-  // const r2Y = rect2.left - rect2.height;
-  // const l2Y = rect2.left;
-  // const r1Y = rect1.left - rect1.height;
-
-  // if (l1X >= r2X || l2X >= r1X) {
-  //   return true;
-  // }
-
-  // if (l1Y <= r2Y || l2Y <= r1Y) {
-  //   return true;
-  // }
-
-  // return false;
+  if (top1 < top2
+    && left1 <= left2
+    && bottom1 < bottom2
+    && right1 < right2
+    && rect1.height
+    > rect2.height) {
+    return false;
+  }
+  return true;
 }
 
 
@@ -501,8 +486,13 @@ function getCommonDirectoryPath(/* pathes */) {
  *                         [ 6 ]]
  *
  */
-function getMatrixProduct(/* m1, m2 */) {
-  throw new Error('Not implemented');
+function getMatrixProduct(m1, m2) {
+  const result = new Array(m1.length).fill()
+    .map(() => new Array(m2[0].length).fill());
+
+  return result.map((row, i) => row
+    .map((value, j) => m1[i]
+      .reduce((prevValue, currentValue, index) => prevValue + (currentValue * m2[index][j]), 0)));
 }
 
 
@@ -536,8 +526,40 @@ function getMatrixProduct(/* m1, m2 */) {
  *    [    ,   ,    ]]
  *
  */
-function evaluateTicTacToePosition(/* position */) {
-  throw new Error('Not implemented');
+function evaluateTicTacToePosition(position) {
+  const one = position[0];
+  const two = position[1];
+  const three = position[2];
+
+  if ((one[0] !== undefined)
+    && ((one[0] === two[1]
+    && one[0] === three[2])
+    || (one[0] === one[1]
+    && one[1] === one[2])
+    || (one[0] === two[0]
+    && two[0] === three[0]))) {
+    return one[0];
+  }
+
+  if ((two[1] !== undefined)
+    && ((one[2] === two[1]
+    && three[0] === two[1])
+    || (two[0] === two[1]
+    && two[1] === two[2])
+    || (one[1] === two[1]
+    && two[1] === three[1]))) {
+    return two[1];
+  }
+
+  if ((three[2] !== undefined)
+  && ((three[0] === three[1]
+  && three[0] === three[2])
+  || (one[2] === two[2]
+  && two[2] === three[2]))) {
+    return three[2];
+  }
+
+  return undefined;
 }
 
 
